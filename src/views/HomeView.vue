@@ -1,32 +1,25 @@
-<script setup>
-import { useUserStore } from "../stores/user";
-import { useTaskStore} from "../stores/task"
-import { ref } from "vue";
-
-const userStore = useUserStore();
-const taskStore = useTaskStore();
-
-const email = ref("");
-const password = ref("");
-</script>
-
 <template>
-  <h1>Home</h1>
-  <h2 v-if="userStore.user">Current User: {{ userStore.user.user.email }}</h2>
-
-  <input placeholder="Write your email" v-model="email" />
-  <input type="password" placeholder="Write your password" v-model="password" />
-  <button @click="userStore.createNewUser(email, password)">
-    Create new User
-  </button>
-
-  <br><br>
-  <button @click="taskStore.fetchTasks()">fetch tasks</button>
-  <ul>
-    <li v-for="task in taskStore.tasks">
-      {{ task.title }}
-    </li>
-  </ul>
+  <div>
+    <AppHeader />
+    <h1>Welcome to the App!</h1>
+    <p>This is your starting point to a great experience. Sign up or log in to get started!</p>
+    <router-link to="/auth" class="btn">Get Started</router-link>
+  </div>
 </template>
 
-<style></style>
+<script setup>
+import AppHeader from "@/components/AppHeader.vue";
+</script>
+
+<style scoped>
+.btn {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+}
+.btn:hover {
+  background-color: #0056b3;
+}
+</style>
