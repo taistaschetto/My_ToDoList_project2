@@ -3,6 +3,7 @@
       <input type="checkbox" v-model="task.completed" @change="toggleTaskCompletion">
       {{ task.title }} - {{ task.description }}
       <button @click="deleteTask(task.id)">Delete</button>
+      <button @click="editTask(task.id)">Edit</button>
     </div>
   </template>
   

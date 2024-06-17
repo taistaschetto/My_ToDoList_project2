@@ -1,38 +1,43 @@
+// user.js
 import { defineStore } from "pinia";
 import supabase from "@/lib/supabase";
 import { ref } from "vue";
 
 export const useUserStore = defineStore("userStore", () => {
   const user = ref();
+  const error = ref('');
 
   const createNewUser = async (email, password) => {
-    const { data, error } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
-
-    if (error) console.log("error: ", error);
-    else user.value = data;
-    console.log("user :", user.value);
+    try {
+      let { user: newUser, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+      });
+      if (signUpError) throw signUpError;
+      user.value = newUser; 
+    } catch (err) {
+      error.value = err.message;
+      throw err; 
+    }
   };
-
+  console.log(supabase.auth)
   const signIn = async (email, password) => {
-    const { user: signedInUser, error } = await supabase.auth.signIn({
-      email: email,
-      password: password,
-    });
-
-    if (error) {
-      console.log("sign in error: ", error);
-      throw error; 
-    } else {
+    try {
+      let { user: signedInUser, error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      if (signInError) throw signInError;
       user.value = signedInUser;
-      console.log("user signed in: ", user.value);
+    } catch (err) {
+      error.value = err.message;
+      throw err; 
     }
   };
 
   return {
     user,
+    error, 
     createNewUser,
     signIn,
   };

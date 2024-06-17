@@ -29,40 +29,35 @@
         </span>
       </div>
 
-      <div v-if="error" class="error">{{ error }}</div>
+      <div v-if="localError" class="error">{{ localError }}</div>
 
-      <button type="submit" :disabled="loading.value">
-        {{
-          loading.value
-            ? "Processing..."
-            : isSigningUp.value
-            ? "Create Account"
-            : "Log In"
-        }}
+      <button v-if="!isSigningUp" type="submit" :disabled="loading.value">
+        Log In
       </button>
     </form>
 
+    <button v-if="isSigningUp" type="submit" :disabled="loading.value" @click="signUp">
+      Create Account
+    </button>
+
     <button @click="toggleMode">
-      {{
-        isSigningUp
-          ? "Already have an account? Sign In."
-          : "No account? Sign Up."
-      }}
+      {{ isSigningUp ? "Already have an account? Sign In." : "No account? Sign Up." }}
     </button>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useUserStore } from "@/stores/user";
-import { useRouter } from "vue-router";
+import { ref, watch } from 'vue';
+import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
 
-const email = ref("");
-const password = ref("");
-const confirmPassword = ref("");
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
 const isSigningUp = ref(false);
 const userStore = useUserStore();
-const error = ref("");
+const router = useRouter();
+const localError = ref(''); 
 const loading = ref(false);
 
 const validEmail = (email) => {
@@ -71,39 +66,38 @@ const validEmail = (email) => {
 
 const toggleMode = () => {
   isSigningUp.value = !isSigningUp.value;
-  error.value = "";
+  localError.value = ''; 
 };
 
-// Sign Up function
+watch(() => userStore.error, (newError) => {
+  localError.value = newError;
+});
+
 const signUp = async () => {
-  loading.value = true;
-  error.value = "";
-  if (password.value.length < 6) {
-    error.value = "Password must be at least 6 characters long.";
-    return;
-  }
   if (password.value !== confirmPassword.value) {
-    error.value = "Passwords do not match.";
+    localError.value = "Passwords do not match.";
     return;
   }
+  loading.value = true;
   try {
-    const { error: signUpError } = await userStore.createNewUser(
-      email.value,
-      password.value
-    );
-    if (signUpError) {
-      error.value = signUpError.message;
-    } else {
-      error.value = "Account created successfully. Please sign in.";
-    }
-  } catch (e) {
-    error.value = "An unexpected error occurred.";
+    await userStore.createNewUser(email.value, password.value);
+    router.push('/dashboard');
+  } catch (err) {
+  } finally {
+    loading.value = false;
   }
-
-  loading.value = false;
 };
 
-const signIn = async () => {};
+const signIn = async () => {
+  loading.value = true;
+  try {
+    await userStore.signIn(email.value, password.value);
+    router.push('/dashboard');
+  } catch (err) {
+  } finally {
+    loading.value = false;
+  }
+};
 </script>
 
 <style scoped>
