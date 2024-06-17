@@ -3,6 +3,8 @@ import HomeView from "@/views/HomeView.vue";
 import AuthView from "@/views/AuthView.vue";
 import Dashboard from "@/views/Dashboard.vue";
 import NotFoundView from "@/views/NotFoundView.vue";
+import { useUserStore } from '@/stores/user'; 
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +30,17 @@ const router = createRouter({
       component: NotFoundView,
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const userStore = useUserStore(); 
+  const requiresAuth = to.meta.requiresAuth;
+  
+  if (requiresAuth && !userStore.user) { 
+    next('/auth'); 
+  } else {
+    next(); 
+  }
 });
 
 export default router;
