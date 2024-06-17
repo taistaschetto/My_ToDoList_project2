@@ -1,10 +1,10 @@
-<script setup>
-import { RouterView } from 'vue-router';
-
-</script>
-
 <template>
-  <RouterView></RouterView>
+  <div id="app">
+    <AppHeader />
+    <router-view />
+  </div>
 </template>
 
-<style></style>
+<script setup>
+import AppHeader from "@/components/AppHeader.vue";
+</script>
