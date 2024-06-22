@@ -1,16 +1,17 @@
 import { defineStore } from "pinia";
 import supabase from "@/lib/supabase";
-import { ref, onUnmounted } from "vue";
+import { ref } from "vue";
 import { useUserStore } from "./user";
 
 export const useTaskStore = defineStore("taskStore", () => {
   const tasks = ref([]);
 
-  // Fetch tasks
+  // Fetch
   const fetchTasks = async () => {
     const userStore = useUserStore();
 
-    if (!userStore.user.value) {
+    if (!userStore.user) {
+      console.log(userStore.user.user.id);
       console.error("No user logged in");
       return;
     }
@@ -18,7 +19,7 @@ export const useTaskStore = defineStore("taskStore", () => {
     const { data, error } = await supabase
       .from("tasks")
       .select("*")
-      .eq("user_id", userStore.user.value.id); // ensure user_id is used correctly in your tasks table
+      .eq("user_id", userStore.user.user.id);
 
     if (error) {
       console.error("Error fetching tasks:", error);
@@ -28,13 +29,11 @@ export const useTaskStore = defineStore("taskStore", () => {
     tasks.value = data;
   };
 
-  
-
-  // Add a new task
-  const addTask = async (task) => {
-    const { error } = await supabase.from("tasks").insert([task]);
+  // Add
+  const addTask = async (taskDetails) => {
+    const { error } = await supabase.from("tasks").insert([taskDetails]);
     if (error) {
-      console.error("Error adding task:", error);
+      console.error("Failed to add task:", error.message);
       return;
     }
     await fetchTasks();
@@ -44,7 +43,7 @@ export const useTaskStore = defineStore("taskStore", () => {
   const deleteTask = async (id) => {
     const { error } = await supabase.from("tasks").delete().match({ id });
     if (error) console.error("Error deleting task:", error);
-    else await fetchTasks(); 
+    else await fetchTasks();
   };
 
   // Modify

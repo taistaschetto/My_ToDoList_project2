@@ -3,8 +3,9 @@ import supabase from "@/lib/supabase";
 import { ref } from "vue";
 
 export const useUserStore = defineStore("userStore", () => {
-  const user = ref(null);
+  const user = ref(JSON.parse(localStorage.getItem('user')));
   const error = ref('');
+
 
   const createNewUser = async (email, password) => {
     try {
@@ -21,32 +22,34 @@ export const useUserStore = defineStore("userStore", () => {
   };
   const signOut = async () => {
   try {
-    await supabase.auth.signOut(); // Attempt to sign out with Supabase
-    user.value = null; // Reset user state
-    // Optionally, add router push here or in the component where signOut is called
-    // router.push('/');
+    await supabase.auth.signOut();
+    user.value = null; 
+    localStorage.removeItem('user');
+  
   } catch (error) {
     console.error("Error signing out:", error.message);
   }
 };
-  const signIn = async (email, password) => {
-    try {
-      let { user: signedInUser, error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-      if (signInError) throw signInError;
-      user.value = signedInUser;
-    } catch (err) {
-      error.value = err.message;
-      throw err; 
-    }
-  };
+const signIn = async (email, password) => {
+  try {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+    if (error) throw error;
+    user.value = data; 
+    localStorage.setItem('user', JSON.stringify(user.value));
+  } catch (error) {
+    console.error("Sign-in error:", error.message);
+    throw error;
+  }
+};
 
   return {
     user,
     error, 
     createNewUser,
     signIn,
+    signOut
   };
 });

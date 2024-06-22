@@ -36,28 +36,37 @@
       </button>
     </form>
 
-    <button v-if="isSigningUp" type="submit" :disabled="loading.value" @click="signUp">
+    <button
+      v-if="isSigningUp"
+      type="submit"
+      :disabled="loading.value"
+      @click="signUp"
+    >
       Create Account
     </button>
 
     <button @click="toggleMode">
-      {{ isSigningUp ? "Already have an account? Sign In." : "No account? Sign Up." }}
+      {{
+        isSigningUp
+          ? "Already have an account? Sign In."
+          : "No account? Sign Up."
+      }}
     </button>
   </div>
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
-import { useUserStore } from '@/stores/user';
-import { useRouter } from 'vue-router';
+import { ref, watch } from "vue";
+import { useUserStore } from "@/stores/user";
+import { useRouter } from "vue-router";
 
-const email = ref('');
-const password = ref('');
-const confirmPassword = ref('');
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
 const isSigningUp = ref(false);
 const userStore = useUserStore();
 const router = useRouter();
-const localError = ref(''); 
+const localError = ref("");
 const loading = ref(false);
 
 const validEmail = (email) => {
@@ -66,12 +75,15 @@ const validEmail = (email) => {
 
 const toggleMode = () => {
   isSigningUp.value = !isSigningUp.value;
-  localError.value = ''; 
+  localError.value = "";
 };
 
-watch(() => userStore.error, (newError) => {
-  localError.value = newError;
-});
+watch(
+  () => userStore.error,
+  (newError) => {
+    localError.value = newError;
+  }
+);
 
 const signUp = async () => {
   if (password.value !== confirmPassword.value) {
@@ -81,8 +93,9 @@ const signUp = async () => {
   loading.value = true;
   try {
     await userStore.createNewUser(email.value, password.value);
-    router.push('/dashboard');
+    router.push("/dashboard");
   } catch (err) {
+    localError.value = error.message;
   } finally {
     loading.value = false;
   }
@@ -92,8 +105,9 @@ const signIn = async () => {
   loading.value = true;
   try {
     await userStore.signIn(email.value, password.value);
-    router.push('/dashboard');
+    router.push("/dashboard");
   } catch (err) {
+    localError.value = error.message;
   } finally {
     loading.value = false;
   }

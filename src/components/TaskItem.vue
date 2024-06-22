@@ -38,7 +38,7 @@ const saveTask = async () => {
   isEditing.value = false;
 };
 
-const toggleTaskCompletion = () => {
+const toggleTaskCompletion = async() => {
   store.modifyTask(props.task.id, { completed: !props.task.completed });
 };
 
@@ -46,7 +46,7 @@ const cancelEdit = () => {
   isEditing.value = false; 
 };
 
-const deleteTask = (id) => {
+const deleteTask = async (id) => {
   store.deleteTask(id);
 };
 </script>

@@ -6,18 +6,30 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useTaskStore } from "@/stores/task";
+import { ref } from 'vue';
+import { useTaskStore } from '@/stores/task';
+import { useUserStore } from '@/stores/user'; 
 
-const title = ref("");
-const description = ref("");
-const store = useTaskStore();
+const taskStore = useTaskStore();
+const userStore = useUserStore(); 
+const title = ref('');
 
 const addTask = () => {
-  if (title.value.trim()) {
-    store.addTask({ title: title.value, description: description.value });
-    title.value = "";
-    description.value = "";
+  if (!title.value.trim()) {
+    alert("Title is required.");
+    return;
   }
+  if (!userStore.user.user.id) {
+    alert("Please log in to add tasks.");
+    return;
+  }
+
+  const taskDetails = { 
+    title: title.value, 
+    user_id: userStore.user.user.id 
+  };
+
+  taskStore.addTask(taskDetails);
+  title.value = ''; 
 };
 </script>

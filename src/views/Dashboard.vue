@@ -1,8 +1,8 @@
 <template>
   <section>
     <NewTask />
-    <div v-for="task in tasks" :key="task.id" class="task-item">
-      <TaskItem :task="task" />
+    <div v-for="task in taskStore.tasks" :key="task.id" class="task-item">
+      <TaskItem :task="task" :key="task.id" />
     </div>
   </section>
 </template>
@@ -11,12 +11,11 @@
 import NewTask from "@/components/NewTask.vue";
 import TaskItem from "@/components/TaskItem.vue";
 import { useTaskStore } from "@/stores/task.js";
-import { onMounted, watch } from "vue";
+import { watch } from "vue";
 import { useUserStore } from "@/stores/user";
 
 const userStore = useUserStore();
 const taskStore = useTaskStore();
-const tasks = taskStore.tasks;
 
 watch(
   () => userStore.user,
