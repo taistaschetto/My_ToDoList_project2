@@ -11,12 +11,21 @@
 import NewTask from "@/components/NewTask.vue";
 import TaskItem from "@/components/TaskItem.vue";
 import { useTaskStore } from "@/stores/task.js";
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
+import { useUserStore } from "@/stores/user";
 
+const userStore = useUserStore();
 const taskStore = useTaskStore();
-onMounted(() => {
-  taskStore.fetchTasks();
-  taskStore.subscribeToTasks();
-});
 const tasks = taskStore.tasks;
+
+watch(
+  () => userStore.user,
+  (newValue) => {
+    if (newValue) {
+      taskStore.fetchTasks();
+    } else {
+    }
+  },
+  { immediate: true }
+);
 </script>

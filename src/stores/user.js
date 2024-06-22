@@ -1,10 +1,9 @@
-// user.js
 import { defineStore } from "pinia";
 import supabase from "@/lib/supabase";
 import { ref } from "vue";
 
 export const useUserStore = defineStore("userStore", () => {
-  const user = ref();
+  const user = ref(null);
   const error = ref('');
 
   const createNewUser = async (email, password) => {
@@ -20,7 +19,16 @@ export const useUserStore = defineStore("userStore", () => {
       throw err; 
     }
   };
-  console.log(supabase.auth)
+  const signOut = async () => {
+  try {
+    await supabase.auth.signOut(); // Attempt to sign out with Supabase
+    user.value = null; // Reset user state
+    // Optionally, add router push here or in the component where signOut is called
+    // router.push('/');
+  } catch (error) {
+    console.error("Error signing out:", error.message);
+  }
+};
   const signIn = async (email, password) => {
     try {
       let { user: signedInUser, error: signInError } = await supabase.auth.signInWithPassword({

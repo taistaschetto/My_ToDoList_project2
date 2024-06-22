@@ -1,55 +1,60 @@
 import { defineStore } from "pinia";
 import supabase from "@/lib/supabase";
 import { ref, onUnmounted } from "vue";
+import { useUserStore } from "./user";
 
 export const useTaskStore = defineStore("taskStore", () => {
   const tasks = ref([]);
 
-  // Fetch tasks from Supabase
+  // Fetch tasks
   const fetchTasks = async () => {
-    const { data, error } = await supabase.from("tasks").select();
-    if (error) console.error("Error fetching tasks:", error);
-    else tasks.value = data;
-  };
+    const userStore = useUserStore();
 
-  // Function to initiate real-time subscription
-  const subscribeToTasks = () => {
-    const subscription = supabase
+    if (!userStore.user.value) {
+      console.error("No user logged in");
+      return;
+    }
+
+    const { data, error } = await supabase
       .from("tasks")
-      .on("*", async (payload) => {
-        console.log("Change received!", payload);
-        await fetchTasks();
-      })
-      .subscribe();
+      .select("*")
+      .eq("user_id", userStore.user.value.id); // ensure user_id is used correctly in your tasks table
 
-    // Provide a way to unsubscribe
-    onUnmounted(() => {
-      supabase.removeSubscription(subscription);
-    });
+    if (error) {
+      console.error("Error fetching tasks:", error);
+      return;
+    }
+
+    tasks.value = data;
   };
 
-  // Add a new task to Supabase
+  
+
+  // Add a new task
   const addTask = async (task) => {
-    const { data, error } = await supabase.from("tasks").insert([task]);
-    if (error) console.error("Error adding task:", error);
-    else await fetchTasks(); // Re-fetch tasks to update local state
+    const { error } = await supabase.from("tasks").insert([task]);
+    if (error) {
+      console.error("Error adding task:", error);
+      return;
+    }
+    await fetchTasks();
   };
 
-  // Delete a task from Supabase
+  // Delete
   const deleteTask = async (id) => {
     const { error } = await supabase.from("tasks").delete().match({ id });
     if (error) console.error("Error deleting task:", error);
-    else await fetchTasks(); // Re-fetch tasks to update local state
+    else await fetchTasks(); 
   };
 
-  // Modify (update) an existing task in Supabase
+  // Modify
   const modifyTask = async (id, updates) => {
     const { error } = await supabase
       .from("tasks")
       .update(updates)
       .match({ id });
     if (error) console.error("Error updating task:", error);
-    else await fetchTasks(); // Re-fetch tasks to update local state
+    else await fetchTasks();
   };
 
   return {
@@ -58,6 +63,5 @@ export const useTaskStore = defineStore("taskStore", () => {
     addTask,
     deleteTask,
     modifyTask,
-    subscribeToTasks,
   };
 });
