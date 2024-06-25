@@ -28,3 +28,7 @@ watch(
   { immediate: true }
 );
 </script>
+
+<style scoped>
+
+</style>

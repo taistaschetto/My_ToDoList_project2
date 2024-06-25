@@ -41,25 +41,18 @@ const saveTask = async () => {
   isEditing.value = false;
 };
 
-/* const toggleTaskCompletion = async () => {
-  await store.modifyTask(props.task.id, {
-    is_complete: !props.task.is_complete,
-  });
-}; */
+
 
 const toggleTaskCompletion = async () => {
-  // Optimistically toggle the task's completion status locally for immediate UI feedback
   const newCompletionStatus = !props.task.is_complete;
-  props.task.is_complete = newCompletionStatus; // This line is technically an anti-pattern (modifying props directly)
+  props.task.is_complete = newCompletionStatus; 
 
   try {
-    // Then update the status in the backend
     await store.modifyTask(props.task.id, {
       is_complete: newCompletionStatus,
     });
   } catch (error) {
     console.error("Failed to toggle task completion:", error);
-    // Optionally, revert the change if the backend update fails
     props.task.is_complete = !newCompletionStatus;
   }
 };

@@ -21,10 +21,6 @@ import { useUserStore } from "@/stores/user";
 const userStore = useUserStore();
 const router = useRouter();
 
-const goTo = (routeName) => {
-  router.push({ name: routeName });
-};
-
 const signOut = async () => {
   await userStore.signOut();
   router.push({ name: "Home" });
@@ -32,40 +28,43 @@ const signOut = async () => {
 </script>
 
 <style scoped>
-@media (min-width: 600px) {
-  .logo {
-    width: 80px;
-  }
-  .title {
-    font-size: 40px;
-  }
-  nav ul li {
-    margin-left: 60px;
-  }
-}
+
 .header {
   background-color: #ffd3d4;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;
-  .logo {
+  padding: 1rem;}
+
+.logo {
     width: 60px;
   }
-  .title {
+.title {
     margin: 0 auto;
     text-decoration: none;
     color: #000000; 
-    font-size: 35px;
+    font-size: 40px;
   }
-  nav ul {
+nav ul {
     list-style: none;
     margin: 0;
     padding: 0;
   }
-  nav ul li {
+nav ul li {
     margin-left: 20px;
     cursor: pointer;
+  }
+  @media (min-width: 600px) {
+  .logo {
+    width: 60px;
+  }
+  .title {
+    font-size: 50px;
+    padding: 0;
+    margin: 0;
+  }
+  nav ul li {
+    margin-left: 60px;
   }
 }
 </style>

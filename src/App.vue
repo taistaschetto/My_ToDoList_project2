@@ -15,4 +15,6 @@ import AppHeader from "@/components/AppHeader.vue";
   background-color: #ffd3d469; 
   font-family: 'Noto Sans';
 }
+
+
 </style>

@@ -1,13 +1,20 @@
 <template>
   <div class="auth-container">
-    <h2>{{ isSigningUp ? "Sign Up" : "Sign In" }}</h2>
+    <h2 class="auth-title">{{ isSigningUp ? "Sign Up" : "Sign In" }}</h2>
     <form @submit.prevent="isSigningUp ? signUp() : signIn()">
-      <input type="email" v-model="email" placeholder="Email" required />
+      <input
+        class="input"
+        type="email"
+        v-model="email"
+        placeholder="Email"
+        required
+      />
       <span v-if="email && !validEmail(email)" class="error">
         Please enter a valid email address.
       </span>
 
       <input
+        class="input"
         type="password"
         v-model="password"
         placeholder="Password"
@@ -19,6 +26,7 @@
 
       <div v-if="isSigningUp">
         <input
+          class="input"
           type="password"
           v-model="confirmPassword"
           placeholder="Confirm Password"
@@ -30,13 +38,17 @@
       </div>
 
       <div v-if="localError" class="error">{{ localError }}</div>
-
-      <button v-if="!isSigningUp" type="submit" :disabled="loading.value">
-        Log In
-      </button>
     </form>
-
     <button
+      class="btn"
+      v-if="!isSigningUp"
+      type="submit"
+      :disabled="loading.value"
+    >
+      Log In
+    </button>
+    <button
+      class="btn"
       v-if="isSigningUp"
       type="submit"
       :disabled="loading.value"
@@ -45,7 +57,7 @@
       Create Account
     </button>
 
-    <button @click="toggleMode">
+    <button class="btn" @click="toggleMode">
       {{
         isSigningUp
           ? "Already have an account? Sign In."
@@ -115,7 +127,46 @@ const signIn = async () => {
 </script>
 
 <style scoped>
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  gap: 10px;
+}
 .error {
   color: red;
+}
+.input {
+  border-radius: 5px;
+  margin-left: 70px;
+  padding: 10px;
+}
+.input:focus {
+  border-color: #b32225;
+}
+.btn {
+  padding: 10px 15px;
+  background-color: #ec999a;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  margin-top: 20px;
+}
+
+.btn:hover {
+  background-color: #d05f61;
+}
+
+@media (min-width: 768px) {
+  .auth-title{
+   font-size: 30px;
+  }
+  .input,
+  .btn {
+    max-width: 400px;
+    margin: 15px;
+  }
 }
 </style>

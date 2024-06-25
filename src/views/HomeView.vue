@@ -17,20 +17,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; 
-  text-align: center; 
+  min-height: 100vh;
+  text-align: center;
   padding: 20px;
 }
 
 .h1 {
-  font-size: 2rem; /* Adjusted base font size for mobile */
+  font-size: 2rem;
   margin-bottom: 20px;
 }
 
-/* Increased font size might be more comfortable for reading on smaller devices but let's start with 2rem for the h1 and adjust based on actual device testing */
-
 .p {
-  font-size: 1rem; /* Base font size for mobile */
+  font-size: 1rem;
 }
 
 .btn {
@@ -39,7 +37,7 @@
   color: white;
   border-radius: 5px;
   text-decoration: none;
-  margin-top: 20px; 
+  margin-top: 20px;
 }
 
 .btn:hover {
@@ -48,16 +46,16 @@
 
 @media (min-width: 600px) {
   .h1 {
-    font-size: 3rem; 
+    font-size: 3rem;
   }
 
   .p {
-    font-size: 1.2rem; 
+    font-size: 1.2rem;
   }
 
   .btn {
-    padding: 20px 30px; 
-    font-size: 1.2rem; 
+    padding: 20px 30px;
+    font-size: 1.2rem;
   }
 }
 </style>
