@@ -26,7 +26,8 @@ export const useTaskStore = defineStore("taskStore", () => {
       return;
     }
 
-    tasks.value = data;
+    tasks.value = data.sort((a, b) => a.is_complete - b.is_complete);
+
   };
 
   // Add

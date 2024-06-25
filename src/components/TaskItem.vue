@@ -5,12 +5,12 @@
       <button @click="saveTask">Save</button>
       <button @click="cancelEdit">Cancel</button>
     </div>
-    <div v-else>
+    <div v-else :class="{ completed: task.is_complete }">
       <input
-        type="checkbox"
-        v-model="task.is_complete"
-        @change="toggleTaskCompletion"
-      />
+  type="checkbox"
+  :checked="task.is_complete"
+  @click="toggleTaskCompletion"
+/>
       {{ task.title }}
       <button @click="deleteTask(task.id)">Delete</button>
       <button @click="enableEdit">Edit</button>
@@ -41,10 +41,28 @@ const saveTask = async () => {
   isEditing.value = false;
 };
 
-const toggleTaskCompletion = async () => {
-  store.modifyTask(props.task.id, { is_complete: !props.task.is_complete });
-};
+/* const toggleTaskCompletion = async () => {
+  await store.modifyTask(props.task.id, {
+    is_complete: !props.task.is_complete,
+  });
+}; */
 
+const toggleTaskCompletion = async () => {
+  // Optimistically toggle the task's completion status locally for immediate UI feedback
+  const newCompletionStatus = !props.task.is_complete;
+  props.task.is_complete = newCompletionStatus; // This line is technically an anti-pattern (modifying props directly)
+
+  try {
+    // Then update the status in the backend
+    await store.modifyTask(props.task.id, {
+      is_complete: newCompletionStatus,
+    });
+  } catch (error) {
+    console.error("Failed to toggle task completion:", error);
+    // Optionally, revert the change if the backend update fails
+    props.task.is_complete = !newCompletionStatus;
+  }
+};
 const cancelEdit = () => {
   isEditing.value = false;
 };
@@ -54,10 +72,9 @@ const deleteTask = async (id) => {
 };
 </script>
 
-
 <style scoped>
 .completed {
   text-decoration: line-through;
-  color: #b3b3b3; 
+  color: #b3b3b3;
 }
 </style>
