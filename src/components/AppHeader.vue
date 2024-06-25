@@ -50,12 +50,13 @@ const signOut = async () => {
   align-items: center;
   padding: 1rem;
   .logo {
-    width: 70px;
+    width: 60px;
   }
   .title {
     margin: 0 auto;
     text-decoration: none;
     color: #000000; 
+    font-size: 35px;
   }
   nav ul {
     list-style: none;
