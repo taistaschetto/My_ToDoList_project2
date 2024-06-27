@@ -8,7 +8,7 @@
     <router-link to="/" class="title">My ToDo List</router-link>
     <nav>
       <ul>
-        <li v-if="userStore.user" @click="signOut">Sign Out</li>
+        <li class="signout" v-if="userStore.user" @click="signOut">Sign Out</li>
       </ul>
     </nav>
   </header>
@@ -28,40 +28,46 @@ const signOut = async () => {
 </script>
 
 <style scoped>
-
 .header {
   background-color: #ffd3d4;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem;}
-
+  padding: 1rem;
+}
+.signout{
+  font-size: 12px;
+}
 .logo {
-    width: 60px;
-  }
+  width: 60px;
+}
 .title {
-    margin: 0 auto;
-    text-decoration: none;
-    color: #000000; 
-    font-size: 40px;
-  }
+  margin: 0 auto;
+  text-decoration: none;
+  color: #000000;
+  font-size: 8vw;
+}
 nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-  }
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 nav ul li {
-    margin-left: 20px;
-    cursor: pointer;
-  }
-  @media (min-width: 600px) {
+  margin-left: 20px;
+  cursor: pointer;
+}
+@media (min-width: 600px) {
   .logo {
     width: 60px;
   }
+  .signout{
+  font-size: 20px;
+}
   .title {
     font-size: 50px;
     padding: 0;
     margin: 0;
+    margin-left: 80px;
   }
   nav ul li {
     margin-left: 60px;

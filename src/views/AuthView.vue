@@ -38,15 +38,16 @@
       </div>
 
       <div v-if="localError" class="error">{{ localError }}</div>
-    </form>
-    <button
-      class="btn"
+      <button
+      class="btn login"
       v-if="!isSigningUp"
       type="submit"
       :disabled="loading.value"
     >
       Log In
     </button>
+    </form>
+    
     <button
       class="btn"
       v-if="isSigningUp"
@@ -153,6 +154,10 @@ const signIn = async () => {
   border-radius: 5px;
   text-decoration: none;
   margin-top: 20px;
+}
+
+.login{
+  margin-left: 120px;
 }
 
 .btn:hover {

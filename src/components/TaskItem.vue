@@ -1,19 +1,26 @@
 <template>
   <div>
     <div v-if="isEditing">
-      <input type="text" v-model="editTitle" placeholder="Title" />
-      <button @click="saveTask">Save</button>
-      <button @click="cancelEdit">Cancel</button>
-    </div>
-    <div v-else :class="{ completed: task.is_complete }">
       <input
-  type="checkbox"
-  :checked="task.is_complete"
-  @click="toggleTaskCompletion"
-/>
-      {{ task.title }}
-      <button @click="deleteTask(task.id)">Delete</button>
-      <button @click="enableEdit">Edit</button>
+        class="input"
+        type="text"
+        v-model="editTitle"
+        placeholder="Title"
+      />
+      <button class="btn" @click="saveTask">Save</button>
+      <button class="btn" @click="cancelEdit">Cancel</button>
+    </div>
+    <div v-else class="task-item" :class="{ completed: task.is_complete }">
+      <input class="checkbox"
+        type="checkbox"
+        :checked="task.is_complete"
+        @click="toggleTaskCompletion"
+      />
+      <span class="task-text">{{ task.title }}</span>
+      <div class="task-actions">
+        <button class="btn" @click="enableEdit">Edit</button>
+        <button class="btn" @click="deleteTask(task.id)">Delete</button>
+      </div>
     </div>
   </div>
 </template>
@@ -41,11 +48,9 @@ const saveTask = async () => {
   isEditing.value = false;
 };
 
-
-
 const toggleTaskCompletion = async () => {
   const newCompletionStatus = !props.task.is_complete;
-  props.task.is_complete = newCompletionStatus; 
+  props.task.is_complete = newCompletionStatus;
 
   try {
     await store.modifyTask(props.task.id, {
@@ -66,8 +71,77 @@ const deleteTask = async (id) => {
 </script>
 
 <style scoped>
-.completed {
-  text-decoration: line-through;
-  color: #b3b3b3;
+.btn {
+  background-color: #ec999a;
+  color: white;
+  border-radius: 5px;
+  text-decoration: none;
+  padding: 0px 10px;
+  margin-left: 10px;
+  font-size: 10px;
 }
+
+.btn:hover {
+  background-color: #d05f61;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start; 
+  width: calc(100% - 20px); 
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 15px;
+  gap: 10px;
+  flex-wrap: wrap; 
+  position: relative; 
+
+}
+
+/* .task-item::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 5px; 
+  transform: translateX(-50%); 
+  width: 75vw; 
+  height: 2px; 
+  background: #d05f61ab 
+}
+ */
+.task-text {
+  flex-grow: 1; 
+  flex-shrink: 1;
+  min-width: 0; 
+  white-space: normal; 
+  word-wrap: break-word; 
+  word-wrap: break-word;
+  margin-right: auto;
+}
+
+.completed {
+  text-decoration: line-through double;
+  color: #757070;
+}
+
+
+@media (min-width: 600px) {
+  .task-item {
+    font-size: 20px;
+    justify-content: flex-start;
+  }
+  .task-item::after {
+    width: 70vw;
+  }
+  .btn {
+    font-size: 12px;
+    padding: 0px 12px;
+  }
+
+  .checkbox{
+  margin-top: 8px;
+}
+}
+
 </style>

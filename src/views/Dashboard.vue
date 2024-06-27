@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section class="dashboard-container">
     <NewTask />
     <div v-for="task in taskStore.tasks" :key="task.id" class="task-item">
       <TaskItem :task="task" :key="task.id" />
@@ -30,5 +30,12 @@ watch(
 </script>
 
 <style scoped>
-
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+  gap: 5px; 
+  padding: 20px;
+  width: 100%;
+}
 </style>
