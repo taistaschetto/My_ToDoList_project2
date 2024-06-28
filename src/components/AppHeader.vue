@@ -67,7 +67,6 @@ nav ul li {
     font-size: 50px;
     padding: 0;
     margin: 0;
-    margin-left: 80px;
   }
   nav ul li {
     margin-left: 60px;

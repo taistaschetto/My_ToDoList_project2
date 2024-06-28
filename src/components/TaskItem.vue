@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="items-container">
     <div v-if="isEditing">
       <input
-        class="input"
+        class="input task-item"
         type="text"
         v-model="editTitle"
         placeholder="Title"
@@ -71,6 +71,9 @@ const deleteTask = async (id) => {
 </script>
 
 <style scoped>
+.items-container{
+  display: flex;
+}
 .btn {
   background-color: #ec999a;
   color: white;
@@ -92,10 +95,12 @@ const deleteTask = async (id) => {
   width: calc(100% - 20px); 
   padding: 10px;
   border-radius: 10px;
+  margin-left: 4.5vw;
   font-size: 15px;
   gap: 10px;
   flex-wrap: wrap; 
   position: relative; 
+
 
 }
 
@@ -114,9 +119,7 @@ const deleteTask = async (id) => {
   flex-grow: 1; 
   flex-shrink: 1;
   min-width: 0; 
-  white-space: normal; 
   word-wrap: break-word; 
-  word-wrap: break-word;
   margin-right: auto;
 }
 
@@ -130,6 +133,9 @@ const deleteTask = async (id) => {
   .task-item {
     font-size: 20px;
     justify-content: flex-start;
+    margin-left: 30vw;
+    width: 100%;
+
   }
   .task-item::after {
     width: 70vw;
