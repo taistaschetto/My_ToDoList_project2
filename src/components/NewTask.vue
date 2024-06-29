@@ -41,6 +41,7 @@ const addTask = () => {
   align-items: center;
   width: 100%;
   gap: 10px;
+  margin-bottom: 25px;
 }
 
 input {

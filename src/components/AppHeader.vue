@@ -6,9 +6,16 @@
       alt="My ToDo List Logo"
     />
     <router-link to="/" class="title">My ToDo List</router-link>
+    <div v-if="!userStore.user" class="nav-placeholder"></div>
+
     <nav>
       <ul>
-        <li class="signout" v-if="userStore.user" @click="signOut">Sign Out</li>
+        <li class="links signout" v-if="userStore.user" @click="signOut">
+          Sign Out
+        </li>
+        <li v-if="userStore.user">
+          <router-link class="links" to="/dashboard">Dashboard</router-link>
+        </li>
       </ul>
     </nav>
   </header>
@@ -35,8 +42,13 @@ const signOut = async () => {
   align-items: center;
   padding: 1rem;
 }
-.signout{
+.links {
   font-size: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+.signout {
+  font-size: 10px;
 }
 .logo {
   width: 60px;
@@ -47,7 +59,12 @@ const signOut = async () => {
   color: #000000;
   font-size: 8vw;
 }
+
 nav ul {
+  flex-direction: column-reverse;
+  display: flex;
+  align-items: center;
+  gap: 5px;
   list-style: none;
   margin: 0;
   padding: 0;
@@ -59,14 +76,21 @@ nav ul li {
 @media (min-width: 600px) {
   .logo {
     width: 60px;
+    padding-right: 85px;
   }
-  .signout{
-  font-size: 20px;
-}
+  .links {
+    font-size: 20px;
+  }
+  .signout {
+    font-size: 17px;
+  }
   .title {
     font-size: 50px;
     padding: 0;
-    margin: 0;
+  }
+  .nav-placeholder {
+    width: 145px;
+    visibility: hidden;
   }
   nav ul li {
     margin-left: 60px;

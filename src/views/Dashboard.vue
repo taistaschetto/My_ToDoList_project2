@@ -33,8 +33,8 @@ watch(
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start; 
-  gap: 5px; 
+  align-items: flex-start;
+  gap: 5px;
   padding: 20px;
   width: 100%;
 }

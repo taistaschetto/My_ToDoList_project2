@@ -39,15 +39,15 @@
 
       <div v-if="localError" class="error">{{ localError }}</div>
       <button
-      class="btn login"
-      v-if="!isSigningUp"
-      type="submit"
-      :disabled="loading.value"
-    >
-      Log In
-    </button>
+        class="btn login"
+        v-if="!isSigningUp"
+        type="submit"
+        :disabled="loading.value"
+      >
+        Log In
+      </button>
     </form>
-    
+
     <button
       class="btn"
       v-if="isSigningUp"
@@ -156,7 +156,7 @@ const signIn = async () => {
   margin-top: 20px;
 }
 
-.login{
+.login {
   margin-left: 120px;
 }
 
@@ -165,8 +165,8 @@ const signIn = async () => {
 }
 
 @media (min-width: 768px) {
-  .auth-title{
-   font-size: 30px;
+  .auth-title {
+    font-size: 30px;
   }
   .input,
   .btn {
