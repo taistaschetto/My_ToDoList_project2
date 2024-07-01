@@ -8,12 +8,13 @@ export const useUserStore = defineStore("userStore", () => {
 
   const createNewUser = async (email, password) => {
     try {
-      let { user: newUser, error: signUpError } = await supabase.auth.signUp({
+      let { data, error } = await supabase.auth.signUp({
         email,
         password,
       });
-      if (signUpError) throw signUpError;
-      user.value = newUser;
+      if (error) throw error;
+      user.value = data;      
+      localStorage.setItem("user", JSON.stringify(user.value));
     } catch (err) {
       error.value = err.message;
       throw err;
